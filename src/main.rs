@@ -3,6 +3,7 @@ use getopts::Options;
 use hyper::service::{make_service_fn, service_fn};
 use hyper::{server::Server, Body, Method, Request, Response, StatusCode};
 use log::{debug, error, info, warn};
+use mysql_async::prelude::Queryable;
 use std::env;
 use std::fs::OpenOptions;
 use std::io::Write;
@@ -10,6 +11,8 @@ use std::net::SocketAddr;
 use std::path::Path;
 use std::str::FromStr;
 use tokio::fs;
+use mysql_async::{Pool, Row};
+use serde_json::{Value, json};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -111,6 +114,7 @@ async fn handle_request(req: Request<Body>) -> Result<Response<Body>, hyper::Err
         (&Method::GET, _) if uri_path.starts_with("/api/v1/") => {
             handle_api_v1(&uri_path[8..].trim_end_matches('/'))
         }
+        (&Method::GET, "/data") => handle_data().await,
         _ => serve_file(uri_path).await,
     }
 }
@@ -141,5 +145,39 @@ async fn serve_file(path: &str) -> Result<Response<Body>, hyper::Error> {
 fn handle_not_found() -> Result<Response<Body>, hyper::Error> {
     let mut response = Response::new(Body::from("Not Found"));
     *response.status_mut() = StatusCode::NOT_FOUND;
+    Ok(response)
+}
+
+async fn handle_data() -> Result<Response<Body>, hyper::Error> {
+    let db_user = "rust_user";
+    let db_pass = "ne2ESO";
+    let db_name = "rust_db";
+    let database_url = format!("mysql://{db_user}:{db_pass}@localhost/{db_name}");
+    let pool = Pool::new(database_url.as_str());
+    let mut conn = pool.get_conn().await.unwrap();
+
+    let query_result = conn
+        .query("SELECT id, name, email FROM users")
+        .await
+        .unwrap();
+
+    let users: Vec<Value> = query_result
+        .into_iter()
+        .map(|row| {
+            let (id, name, email): (u64, String, String) = mysql_async::from_row(row);
+            json!({
+                "id": id,
+                "name": name,
+                "email": email,
+            })
+        })
+        .collect();
+
+    let json_response = serde_json::to_string(&users).unwrap();
+    let response = Response::builder()
+        .header("Content-Type", "application/json")
+        .body(Body::from(json_response))
+        .unwrap();
+
     Ok(response)
 }
