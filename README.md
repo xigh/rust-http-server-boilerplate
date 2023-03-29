@@ -19,7 +19,7 @@ I also wanted to write something light and as simple stupid as possible ! Thus t
 * Warp
 * Tide
 
-All theses crates are mindblowing and **strongly** recommand to use them. But this code is both for learning purpose and the felling of having fine grained control on the functionnalities.
+All theses crates are *mindblowing* and I **strongly** recommand to use them. But this code is both for learning purpose and the felling of having fine grained control on the functionnalities.
 
 ## Specs
 
