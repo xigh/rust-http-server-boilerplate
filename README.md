@@ -35,6 +35,7 @@ All theses crates are *mindblowing* and I **strongly** recommand to use them. Bu
 ## Todos
 
 * [ ] Upload files
+* [ ] MySQL SSL (for Azure)
 * [ ] GraphQL support
 * [ ] JWT - Json Web Token
 * [ ] Password encryption
