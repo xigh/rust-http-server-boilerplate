@@ -35,6 +35,9 @@ All theses crates are *mindblowing* and I **strongly** recommand to use them. Bu
 ## Todos
 
 * [ ] Upload files
+    * [ ]  unzip files
+    * [ ]  image check and resize
+    * [ ]  qrcode
 * [ ] MySQL SSL (for Azure)
 * [ ] GraphQL support
 * [ ] JWT - Json Web Token
