@@ -5,7 +5,7 @@ This is a simple code, written in Rust.
 ## Disclaimer
 
 I started to write it for my needs, and at the same time, I wanted to know how helpful it would be to develop with the help of ChatGPT4.
-Please not I did not asked ChatGPT4 to write the whole code, it is too complex to do that. I only asked how to use the crates I wanted to use.
+Please note that I did not asked ChatGPT4 to write the whole code, it is too complex to do that. I only asked how to use the crates I wanted to use.
 I'll write a blog article on this as soon as possible.
 
 ## Why ?
