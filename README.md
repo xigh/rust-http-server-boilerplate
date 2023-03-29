@@ -5,7 +5,7 @@ This is a simple code, written in Rust.
 I started to write it for my needs, and at the same time, I wanted to know how helpful it would be to develop with the help of ChatGPT4.
 I'll write a blog article on this as soon as possible.
 
-All **latest version of crates** (as of March, the 29th, 2023).
+All **latest version of crates** (as of March, the 29th, 2023). Keep it as simple, stupid as possible !
 
 ## Specs
 
@@ -25,3 +25,4 @@ All **latest version of crates** (as of March, the 29th, 2023).
 * [ ] Rate limiting and bandwidth control
 * [ ] Ssl support
 * [ ] Ability to send emails from templates
+* [ ] Write a simple documentation explaining how all this works
