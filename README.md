@@ -36,6 +36,8 @@ All theses crates are *mindblowing* and I **strongly** recommand to use them. Bu
 
 * [ ] Upload files
 * [ ] GraphQL support
+* [ ] JWT - Json Web Token
+* [ ] Password encryption
 * [ ] Rate limiting and bandwidth control
 * [ ] Ssl support
 * [ ] Ability to send emails from templates
@@ -43,6 +45,8 @@ All theses crates are *mindblowing* and I **strongly** recommand to use them. Bu
 * [ ] MongoDB support
 * [ ] PostgreSQL support
 * [ ] OpenAPI / Swagger support
+* [ ] Request to another HTTP Server / REST / GraphQL
+* [ ] Protocol Buffer
 * [ ] **name yours ...**
 
 ## How to use it 
