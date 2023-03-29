@@ -10,7 +10,7 @@ I'll write a blog article on this as soon as possible.
 
 ## Why ?
 
-The main idea with this program is to be up to date with the **latest version of all required crates** (as of March, the 29th, 2023).
+The main idea with this program is to be up to date with the **latest version of all imported crates** (as of March, the 29th, 2023).
 
 I also wanted to write something light and as simple stupid as possible ! Thus there is no high level crates such as :
 
