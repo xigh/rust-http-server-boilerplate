@@ -42,7 +42,8 @@ All theses crates are *mindblowing* and I **strongly** recommand to use them. Bu
 * [ ] Write a simple documentation explaining how all this works
 * [ ] MongoDB support
 * [ ] PostgreSQL support
-* [ ] **name yours**
+* [ ] OpenAPI / Swagger support
+* [ ] **name yours ...**
 
 ## How to use it 
 
