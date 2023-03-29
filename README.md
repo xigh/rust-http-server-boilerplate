@@ -1,6 +1,8 @@
-# Rust http server boilerplate, without any specific http frameworks
+# Rust http server boilerplate
 
-This is a simple code, written in Rust.
+**Without any specific http framework**
+
+This is a simple code, written in Rust programming language.
 
 ## Disclaimer
 
