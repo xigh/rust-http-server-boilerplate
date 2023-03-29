@@ -26,3 +26,42 @@ All **latest version of crates** (as of March, the 29th, 2023). Keep it as simpl
 * [ ] Ssl support
 * [ ] Ability to send emails from templates
 * [ ] Write a simple documentation explaining how all this works
+* [ ] MongoDB support
+* [ ] PostgreSQL support
+* [ ] **name yours**
+
+## How to use it 
+
+It requires a database. You must first prepare a `users` table with this : 
+
+```mysql
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255) UNIQUE
+);
+```
+
+And then copy the file `config.toml.example` to `config.toml`, editing your database parameters :
+
+```toml
+[database]
+username = "your_username"
+password = "your_password"
+host = "localhost"
+database_name = "your_database_name"
+```
+
+Then execute it thanks to cargo :
+
+```bash
+cargo r
+```
+
+That's it.
+
+I hope this little code will help you. 
+
+
+
+
