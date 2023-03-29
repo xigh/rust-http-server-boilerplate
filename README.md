@@ -48,6 +48,7 @@ All theses crates are *mindblowing* and I **strongly** recommand to use them. Bu
 * [ ] OpenAPI / Swagger support
 * [ ] Request to another HTTP Server / REST / GraphQL
 * [ ] Protocol Buffer
+* [ ] Websockets
 * [ ] **name yours ...**
 
 ## How to use it 
