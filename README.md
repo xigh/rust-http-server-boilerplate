@@ -1,4 +1,4 @@
-# rust-http-server-boilerplate
+# Rust http server boilerplate, without any specific http frameworks
 
 This is a simple code, written in Rust.
 
