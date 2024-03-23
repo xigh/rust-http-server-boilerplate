@@ -1,9 +1,11 @@
+use http_body_util::{BodyExt, Full};
 use serde::Deserialize;
-use hyper::{Body, Request, Response, StatusCode};
+use hyper::{body::{Bytes, Incoming}, Request, Response, StatusCode};
 use mysql_async::prelude::Queryable;
 use mysql_async::Error as MySQLError;
 use serde_json::{json, Value};
 use super::App;
+use anyhow::Result;
 
 #[derive(Debug, Deserialize)]
 struct UserData {
@@ -13,7 +15,7 @@ struct UserData {
 }
 
 impl App {
-    pub async fn handle_data(&self) -> Result<Response<Body>, hyper::Error> {
+    pub async fn handle_data(&self) -> Result<Response<Full<Bytes>>> {
         let mut conn = self.get_conn().await;
     
         let query_result = conn
@@ -36,23 +38,16 @@ impl App {
         let json_response = serde_json::to_string(&users).unwrap();
         let response = Response::builder()
             .header("Content-Type", "application/json")
-            .body(Body::from(json_response))
+            .body(Full::new(Bytes::from(json_response)))
             .unwrap();
     
         Ok(response)
     }
         
-    pub async fn add_data(&self, req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
-        let bytes = match hyper::body::to_bytes(req.into_body()).await {
-            Ok(bytes) => bytes,
-            Err(error) => return self.create_error_response(
-                StatusCode::BAD_REQUEST,
-                "Could not read body",
-                format!("{}", error),
-            ),
-        };
-    
-        let user_data: UserData = match serde_json::from_slice(&bytes) {
+    pub async fn add_data(&self, req: Request<Incoming>) -> Result<Response<Full<Bytes>>> {
+        let body = req.collect().await?.to_bytes();
+
+        let user_data: UserData = match serde_json::from_slice(&body) {
             Ok(user_data) => user_data,
             Err(error) => return self.create_error_response(
                 StatusCode::BAD_REQUEST,
@@ -79,7 +74,7 @@ impl App {
                 let response_body = serde_json::to_string(&json_response).unwrap();
                 let response = Response::builder()
                     .header("Content-Type", "application/json")
-                    .body(Body::from(response_body))
+                    .body(Full::new(Bytes::from(response_body)))
                     .unwrap();
                 Ok(response)
             }

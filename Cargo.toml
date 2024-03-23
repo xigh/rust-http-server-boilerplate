@@ -1,18 +1,20 @@
 [package]
 name = "rust-http-server"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["zexigh@gmail.com"]
 
 [dependencies]
-env_logger = "0.10.0"
+env_logger = "0.11.3"
 getopts = "0.2.21"
-http = "0.2.9"
-hyper = { version = "0.14.25", features = ["full"] }
+http = "1.1.0"
+hyper = { version = "1.2.0", features = ["full"] }
 log = "0.4.17"
-mysql_async = "0.31.3"
+mysql_async = "0.34.1"
 serde = { version = "1.0.159", features = ["derive"] }
 serde_json = "1.0.95"
 tokio = { version = "1.27.0", features = ["full"] }
-toml = "0.7.3"
+toml = "0.8.12"
+http-body-util = "0.1"
+hyper-util = { version = "0.1", features = ["full"] }
+anyhow = "1.0.81"

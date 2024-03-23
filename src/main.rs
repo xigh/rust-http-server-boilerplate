@@ -1,8 +1,7 @@
 use env_logger::{Builder, Target};
 use getopts::Options;
-use hyper::service::{make_service_fn, service_fn};
-use hyper::{server::Server};
-use log::{error, info};
+use hyper::{server::conn::http1, service::service_fn};
+use hyper_util::rt::TokioIo;
 use std::env;
 use std::fs::OpenOptions;
 use std::io::Write;
@@ -10,10 +9,13 @@ use std::net::SocketAddr;
 use std::path::Path;
 use std::str::FromStr;
 use std::sync::Arc;
+use tokio::net::TcpListener;
 
 use std::fs::File;
 use std::io::Read;
 use toml::de::Error as TomlError;
+
+use anyhow::Result;
 
 mod app;
 use app::{App, Config};
@@ -29,7 +31,7 @@ fn read_config<T: Into<String>>(filename: T) -> Result<Config, TomlError> {
 }
 
 #[tokio::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> Result<()> {
     let args: Vec<String> = env::args().collect();
 
     let mut opts = Options::new();
@@ -114,23 +116,34 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let config = read_config(config_file).expect("could not read config_file");
     let app = Arc::new(App::new(config));
-
-    let make_service = make_service_fn(move |_conn| {
-        let app = Arc::clone(&app);
-        async move {
-            Ok::<_, hyper::Error>(service_fn(move |req| {
-                let app = Arc::clone(&app);
-                async move { app.handle_request(req).await }
-            }))
-        }
-    });
-    let server = Server::bind(&socket_addr).serve(make_service);
+    let listener = TcpListener::bind(socket_addr).await?;
 
     // Run the server
-    info!("Listening on http://{}", socket_addr);
-    if let Err(e) = server.await {
-        error!("server error: {}", e);
+    loop {
+        let (stream, _) = listener.accept().await?;
+
+        // Use an adapter to access something implementing `tokio::io` traits as if they implement
+        // `hyper::rt` IO traits.
+        let io = TokioIo::new(stream);
+
+        let app = Arc::clone(&app);
+
+        // Spawn a tokio task to serve multiple connections concurrently
+        tokio::task::spawn(async move {
+            // Finally, we bind the incoming connection to our `hello` service
+            if let Err(err) = http1::Builder::new()
+                // `service_fn` converts our function in a `Service`
+                .serve_connection(io, service_fn(move |req| {
+                    let app = Arc::clone(&app);
+                    async move { app.handle_request(req).await }
+                }))
+                .await
+            {
+                println!("Error serving connection: {:?}", err);
+            }
+        });
     }
 
-    Ok(())
+    // never return
+    // Ok(())
 }

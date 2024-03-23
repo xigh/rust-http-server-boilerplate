@@ -1,5 +1,15 @@
 # Rust http server boilerplate
 
+## New version (0.2.0)
+
+Updated crates to :
+
+```toml
+hyper = { version = "1.2.0", features = ["full"] }
+hyper-util = { version = "0.1", features = ["full"] }
+tokio = { version = "1.27.0", features = ["full"] }
+```
+
 **Without any specific http framework**
 
 This is a simple code, written in Rust programming language.

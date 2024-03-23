@@ -1,9 +1,12 @@
+use http_body_util::Full;
 use serde::Deserialize;
 use http::header::CONTENT_TYPE;
-use hyper::{Body, Method, Request, Response, StatusCode};
-use log::{debug};
+use hyper::{body::{Bytes, Incoming}, Method, Request, Response, StatusCode};
+use log::debug;
 use mysql_async::{Conn, Pool};
 use serde_json::json;
+
+use anyhow::Result;
 
 mod data;
 mod hello;
@@ -34,7 +37,7 @@ impl App {
         }
     }
 
-    pub async fn handle_request(&self, req: Request<Body>) -> Result<Response<Body>, hyper::Error> {
+    pub async fn handle_request(&self, req: Request<Incoming>) -> Result<Response<Full<Bytes>>> {
         let method = req.method();
         let uri_path = req.uri().path();
         let headers = req.headers();
@@ -52,7 +55,7 @@ impl App {
                 {
                     self.add_data(req).await
                 } else {
-                    let mut response = Response::new(Body::from("Unsupported Content-Type"));
+                    let mut response = Response::new(Full::new(Bytes::from("Unsupported Content-Type")));
                     *response.status_mut() = StatusCode::UNSUPPORTED_MEDIA_TYPE;
                     Ok(response)
                 }
@@ -73,7 +76,7 @@ impl App {
         status: StatusCode,
         error: T1,
         message: T2,
-    ) -> Result<Response<Body>, hyper::Error> {
+    ) -> Result<Response<Full<Bytes>>> {
         let response_body = json!({
             "error": error.into(),
             "message": message.into(),
@@ -82,8 +85,9 @@ impl App {
         let response = Response::builder()
             .status(status)
             .header("Content-Type", "application/json")
-            .body(Body::from(response_body))
-            .unwrap();
+            .body(Full::new(Bytes::from(response_body)))
+            .unwrap()
+            ;
         Ok(response)
     }
 }
