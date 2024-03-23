@@ -1,5 +1,9 @@
 # Rust http server boilerplate
 
+**Without any specific http framework**
+
+This is a simple code, written in Rust programming language.
+
 ## New version (0.2.0)
 
 Updated crates to :
@@ -10,11 +14,7 @@ hyper-util = { version = "0.1", features = ["full"] }
 tokio = { version = "1.27.0", features = ["full"] }
 ```
 
-**Without any specific http framework**
-
-This is a simple code, written in Rust programming language.
-
-## Disclaimer
+## Disclaimer (was for 0.1.0)
 
 I started to write it for my needs, and at the same time, I wanted to know how helpful it would be to develop with the help of ChatGPT4.
 Please note that I did not asked ChatGPT4 to write the whole code, it is too complex to do that. I only asked how to use the crates I wanted to use.
